@@ -1,0 +1,18 @@
+
+
+
+Controllers  ------->  Services ---------> Repositories 
+    |
+    Views
+    
+
+Partial Views: 
+
+Grid: 12 col system s
+
+
+Eager Loading: Include()
+Lazy Loading
+AsNoTracking()
+
+
