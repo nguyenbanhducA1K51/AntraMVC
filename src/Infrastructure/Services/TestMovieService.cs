@@ -33,6 +33,11 @@ public class TestMovieService: IMovieService
         throw new NotImplementedException();
     }
 
+    public MovieCardModel GetMovieById(int? id)
+    {
+        throw new NotImplementedException();
+    }
+
     public bool DeleteMovie(int id)
     {
         throw new NotImplementedException();

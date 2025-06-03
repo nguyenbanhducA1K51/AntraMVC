@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using ApplicationCore.Contracts.Repositories;
 using ApplicationCore.Contracts.Services;
 using ApplicationCore.Entities;
@@ -49,6 +50,23 @@ public class MovieService: IMovieService
 
         return null;
     }
+
+    public MovieCardModel GetMovieById(int? id)
+    {
+        if (id == null)
+        {
+            return null;
+        }
+        
+        Movie movie= _movieRepository.GetMovieById(id.Value);
+        return new MovieCardModel()
+        {
+            Id = movie.Id,
+            PosterURL = movie.PosterUrl,
+            Title = movie.Title,
+        };
+    } 
+    
 
     public bool DeleteMovie(int id)
     {
