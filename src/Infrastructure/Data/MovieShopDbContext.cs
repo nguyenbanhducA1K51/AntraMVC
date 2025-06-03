@@ -15,6 +15,9 @@ public class MovieShopDbContext: DbContext
     public DbSet<Movie> Movie { get; set; }
     public DbSet<Trailer> Trailers { get; set; }
     public DbSet<MovieGenre> MovieGenres { get; set; }
+    public DbSet<Cast> Cast { get; set; }
+    public DbSet<MovieCast> MovieCast { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -39,10 +42,21 @@ public class MovieShopDbContext: DbContext
             .HasForeignKey(x => x.GenreId);
     }
 
+  
+
+    public void Configure(EntityTypeBuilder<MovieCast> modelBuilder)
+    {
+    modelBuilder.HasKey(x => new { x.MovieId, x.CastId });    
+    modelBuilder.HasOne(x=>x.Movie)
+        .WithMany(x=>x.MovieCasts)
+        .HasForeignKey(x => x.MovieId);
+    modelBuilder.HasOne(x => x.Cast)
+        .WithMany(x => x.MovieCasts)
+        .HasForeignKey(x => x.CastId);
+    }
     public void ConfigureMovie(EntityTypeBuilder<Movie> builder)
     {
-        //fluent API
-        //specify all the rules for entity
+   
         builder.ToTable("Movies");
         builder.HasKey(m => m.Id);
         builder.Property(m => m.Title).HasColumnType("varchar(20)");
