@@ -1,5 +1,6 @@
 using ApplicationCore.Contracts.Repositories;
 using ApplicationCore.Entities;
+using ApplicationCore.Models;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,4 +38,6 @@ public class MovieRepository: BaseRepository<Movie>, IMovieRepository
             .FirstOrDefault(m => m.Id == id)
                ?? throw new KeyNotFoundException($"Movie with ID {id} not found");
     }
+
+ 
 }

@@ -29,8 +29,37 @@ public class MovieShopDbContext: DbContext
 
         modelBuilder.Entity<Movie>(ConfigureMovie);
         modelBuilder.Entity<MovieGenre>(ConfigureMovieGenre);
+        modelBuilder.Entity<MovieCast>(ConfigureMovieCasts);
+        modelBuilder.Entity<UserRole>(ConfigureUserRole);
+        modelBuilder.Entity<Purchase>(ConfigurePurchase);
+        modelBuilder.Entity<Review>(ConfigureReview);
     }
 
+    private void ConfigureReview(EntityTypeBuilder<Review> modelBuilder)
+    {
+        modelBuilder.HasKey(x=>new {x.MovieId,x.UserId});
+        modelBuilder.HasOne(x => x.Movie).WithMany(x=>x.Reviews).HasForeignKey(x => x.MovieId);
+        modelBuilder.HasOne(x => x.User).WithMany(x=>x.Reviews).HasForeignKey(x => x.UserId);
+    }
+    private void ConfigurePurchase(EntityTypeBuilder<Purchase> modelBuilder)
+    {
+        modelBuilder.HasKey(x => new { x.MovieId, x.UserId });
+        modelBuilder.HasOne(x => x.User).WithMany(x=>x.Purchases).HasForeignKey(x => x.UserId);
+        modelBuilder.HasOne(x => x.Movie).WithMany(x => x.Purchases).HasForeignKey(x => x.MovieId);
+    }
+    private void ConfigureUserRole(EntityTypeBuilder<UserRole>modelBuilder)
+    {
+        modelBuilder.HasKey(x => new { x.RoleId, x.UserId });
+        modelBuilder.HasOne(x=>x.Role)
+            .WithMany(x=>x.UserRoles)
+            .HasForeignKey(x=>x.RoleId);
+        modelBuilder.HasOne(x=>x.User)
+            .WithMany(x=>x.UserRoles)
+            .HasForeignKey(x=>x.UserId);
+        
+    }
+
+  
     private void ConfigureMovieGenre(EntityTypeBuilder<MovieGenre> modelBuilder)
     {
         modelBuilder.HasKey(x => new { x.MovieId, x.GenreId });
@@ -44,7 +73,7 @@ public class MovieShopDbContext: DbContext
 
   
 
-    public void Configure(EntityTypeBuilder<MovieCast> modelBuilder)
+    public void ConfigureMovieCasts(EntityTypeBuilder<MovieCast> modelBuilder)
     {
     modelBuilder.HasKey(x => new { x.MovieId, x.CastId });    
     modelBuilder.HasOne(x=>x.Movie)

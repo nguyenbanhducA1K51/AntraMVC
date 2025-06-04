@@ -20,4 +20,8 @@ public class User
  public string ProfilePictureUrl { get; set; }
  [MaxLength(1024)]
  public string Salt { get; set; }
+ 
+ public ICollection<UserRole> UserRoles { get; set; }
+ public ICollection<Purchase> Purchases { get; set; }
+ public ICollection<Review> Reviews { get; set; }
 }

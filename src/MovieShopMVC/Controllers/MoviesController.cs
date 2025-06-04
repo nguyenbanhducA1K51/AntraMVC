@@ -11,7 +11,6 @@ namespace MovieShopMVC.Controllers
             _movieService = movieService;
         }
         
-        // GET: MoviesController
         public ActionResult Index()
         {
             return View();
