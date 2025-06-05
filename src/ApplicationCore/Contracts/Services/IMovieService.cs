@@ -1,3 +1,4 @@
+using ApplicationCore.Entities;
 using ApplicationCore.Models;
 
 namespace ApplicationCore.Contracts.Services;
@@ -10,4 +11,5 @@ public interface IMovieService
    MovieDetailsModel GetMovieDetails(int id);
    MovieCardModel GetMovieById(int? id);
    bool DeleteMovie(int id);
+   Task<MovieDetailsModel> GetMovieDetailsAsync(int id);
 }

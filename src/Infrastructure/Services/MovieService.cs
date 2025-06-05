@@ -3,15 +3,16 @@ using ApplicationCore.Contracts.Repositories;
 using ApplicationCore.Contracts.Services;
 using ApplicationCore.Entities;
 using ApplicationCore.Models;
-
+using Microsoft.Extensions.Logging;
 namespace Infrastructure.Services;
 
 public class MovieService: IMovieService
 {
     private readonly IMovieRepository _movieRepository;
-
-    public MovieService(IMovieRepository movieRepository)
+    private readonly ILogger<MovieService> _logger;
+    public MovieService(IMovieRepository movieRepository,ILogger<MovieService> logger)
     {
+        _logger = logger;
         _movieRepository = movieRepository;
     }
     
@@ -29,11 +30,54 @@ public class MovieService: IMovieService
 
        return movieCardModels;
     }
+    public async Task<MovieDetailsModel> GetMovieDetailsAsync(int id)
+    {
+        var movie = await _movieRepository.GetByIdAsync(id);
+        
+        if (movie == null)
+        {
+            _logger.LogWarning($"Movie with id {id} not found");
+            throw new KeyNotFoundException($"Movie with id {id} not found");
+        }
 
+        
+        var dto = new MovieDetailsModel()
+        {
+            Id = movie.Id,
+            Title = movie.Title,
+            PosterURL = movie.PosterUrl,
+            Overview = movie.Overview,
+            TagLine = movie.TagLine,
+            Budget = movie.Budget,
+            Trailers = movie.Trailers.Select(t => new TrailerModel()
+            {
+                Id = t.Id,
+                TrailerURL = t.TrailerURL,
+                Name = t.Name,
+                MovieId = t.MovieId
+            }).ToList(),
+            Casts = movie.MovieCasts
+                .Select(mc => new CastModel()
+                {
+                    Id = mc.Cast.Id,
+                    Name = mc.Cast.Name,
+                    ProfilePath = mc.Cast.ProfilePath,
+                    Gender = mc.Cast.Gender,
+                    TmdbUrl = mc.Cast.TmdbUrl
+                })
+                .ToList()
+        };
+        
+        
+        return dto;
+    }
+    
     public MovieDetailsModel GetMovieDetails(int id)
     {
-        var movie = _movieRepository.GetById(id);
+        // var movie = _movieRepository.GetById(id);
+        var movie = _movieRepository.GetMovieById(id);
         if (movie != null)
+            
         {
             var movieDetailsModel = new MovieDetailsModel()
             {
@@ -42,9 +86,13 @@ public class MovieService: IMovieService
                 Title = movie.Title,
                 Budget = movie.Budget,
                 Overview = movie.Overview,
+                Price = movie.Price,
                 TagLine = movie.TagLine,
-                Revenue = movie.Revenue
+                Revenue = movie.Revenue,
+               
+                
             };
+          
             return movieDetailsModel;
         }
 
@@ -78,4 +126,5 @@ public class MovieService: IMovieService
 
         return true;
     }
+    
 }

@@ -12,7 +12,7 @@ public class MovieRepository: BaseRepository<Movie>, IMovieRepository
     {
         
     }
-    //GetTop20GrossingMovies()
+
     public IEnumerable<Movie> GetTop20GrossingMovies()
     {
         var movies = _movieShopDbContext.Movie.OrderByDescending(m => m.Revenue).Take(20);
@@ -31,12 +31,16 @@ public class MovieRepository: BaseRepository<Movie>, IMovieRepository
 
     public Movie GetMovieById(int id)
     {
-        return _movieShopDbContext.Movie
+      throw new NotImplementedException();
+    }
+    
+    public async Task<Movie> GetByIdAsync(int id)
+    {
+        return await  _movieShopDbContext.Movie
             .Include(m => m.Trailers)
-            .Include(m => m.MovieGenres)
-            .ThenInclude(mg => mg.Genre)
-            .FirstOrDefault(m => m.Id == id)
-               ?? throw new KeyNotFoundException($"Movie with ID {id} not found");
+            .Include(m => m.MovieGenres).ThenInclude(mg => mg.Genre)
+            .Include(m => m.MovieCasts).ThenInclude(mc => mc.Cast)
+            .FirstOrDefaultAsync(m => m.Id == id);
     }
 
  

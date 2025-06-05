@@ -16,7 +16,7 @@ public class MovieShopDbContext: DbContext
     public DbSet<Trailer> Trailers { get; set; }
     public DbSet<MovieGenre> MovieGenres { get; set; }
     public DbSet<Cast> Cast { get; set; }
-    public DbSet<MovieCast> MovieCast { get; set; }
+    public DbSet<MovieCasts> MovieCasts { get; set; }
     public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,7 +29,7 @@ public class MovieShopDbContext: DbContext
 
         modelBuilder.Entity<Movie>(ConfigureMovie);
         modelBuilder.Entity<MovieGenre>(ConfigureMovieGenre);
-        modelBuilder.Entity<MovieCast>(ConfigureMovieCasts);
+        modelBuilder.Entity<MovieCasts>(ConfigureMovieCasts);
         modelBuilder.Entity<UserRole>(ConfigureUserRole);
         modelBuilder.Entity<Purchase>(ConfigurePurchase);
         modelBuilder.Entity<Review>(ConfigureReview);
@@ -73,7 +73,7 @@ public class MovieShopDbContext: DbContext
 
   
 
-    public void ConfigureMovieCasts(EntityTypeBuilder<MovieCast> modelBuilder)
+    public void ConfigureMovieCasts(EntityTypeBuilder<MovieCasts> modelBuilder)
     {
     modelBuilder.HasKey(x => new { x.MovieId, x.CastId });    
     modelBuilder.HasOne(x=>x.Movie)

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ApplicationCore.Entities;
 
-public class MovieCast
+public class MovieCasts
 {
  public int MovieId { get; set; }
  public int CastId { get; set; }

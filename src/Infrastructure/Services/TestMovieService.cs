@@ -42,4 +42,9 @@ public class TestMovieService: IMovieService
     {
         throw new NotImplementedException();
     }
+
+    public Task<MovieDetailsModel> GetMovieDetailsAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -12,5 +12,5 @@ public string Name { get; set; }
 public string ProfilePath { get; set; }
 public string TmdbUrl { get; set; }
 
-public ICollection<MovieCast> MovieCasts { get; set; }
+public ICollection<MovieCasts> MovieCasts { get; set; }
 }

@@ -8,8 +8,13 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
-
+builder.Services.AddControllersWithViews()
+    .AddRazorRuntimeCompilation();
+builder.Services.AddLogging(configure => 
+{
+    configure.AddConsole();
+    configure.AddDebug();
+});
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddDbContext<MovieShopDbContext>(options =>

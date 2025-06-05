@@ -8,5 +8,5 @@ public interface IMovieRepository: IRepository<Movie>
     IEnumerable<Movie> GetTop20GrossingMovies();
     IEnumerable<Movie>  GetHighestGrossingMovies();
     Movie GetMovieById(int id);
-    
+    Task<Movie> GetByIdAsync(int id);
 }
