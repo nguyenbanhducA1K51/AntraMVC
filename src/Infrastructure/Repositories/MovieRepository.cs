@@ -10,7 +10,6 @@ public class MovieRepository: BaseRepository<Movie>, IMovieRepository
 {
     public MovieRepository(MovieShopDbContext dbContext): base(dbContext)
     {
-        
     }
 
     public IEnumerable<Movie> GetTop20GrossingMovies()

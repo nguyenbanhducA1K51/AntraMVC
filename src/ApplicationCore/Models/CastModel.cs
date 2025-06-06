@@ -7,5 +7,6 @@ public class CastModel
     public string Name { get; set; }
     public string ProfilePath { get; set; }
     public string TmdbUrl { get; set; }
+    public ICollection<MovieCardModel> MovieCards { get; set; }
 
 }

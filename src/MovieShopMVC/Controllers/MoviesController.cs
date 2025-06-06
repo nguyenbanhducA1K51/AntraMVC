@@ -23,15 +23,14 @@ namespace MovieShopMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> MovieDetails(int id)
         {
-            // var movie = _movieService.GetMovieDetails(id);
-            //
-            //
-            // return View(movie);
+           
             try
             {
                 var movieDetails = await _movieService.GetMovieDetailsAsync(id);
-                return Ok(movieDetails);
+             
+                return View(movieDetails);
             }
+            
             catch (KeyNotFoundException ex)
             {
                 _logger.LogWarning(ex.Message);

@@ -9,4 +9,9 @@ public class CastController : Controller
     {
         return View();
     }
+
+    public IActionResult Details(int id)
+    {
+        return View();
+    }
 }
