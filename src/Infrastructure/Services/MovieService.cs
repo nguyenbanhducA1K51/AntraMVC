@@ -16,9 +16,9 @@ public class MovieService: IMovieService
         _movieRepository = movieRepository;
     }
     
-    public List<MovieCardModel> GetTop20GrossingMovies()
+    public async Task<List<MovieCardModel>>  GetTop20GrossingMovies()
     {
-       var movies =  _movieRepository.GetTop20GrossingMovies();
+       var movies = await _movieRepository.GetTop20GrossingMovies();
        var movieCardModels = new List<MovieCardModel>();
        foreach (var movie in movies)
        {
@@ -72,10 +72,10 @@ public class MovieService: IMovieService
         return dto;
     }
     
-    public MovieDetailsModel GetMovieDetails(int id)
+    public async Task<MovieDetailsModel> GetMovieDetails(int id)
     {
         // var movie = _movieRepository.GetById(id);
-        var movie = _movieRepository.GetMovieById(id);
+        var movie = await _movieRepository.GetMovieById(id);
         if (movie != null)
             
         {
@@ -99,14 +99,14 @@ public class MovieService: IMovieService
         return null;
     }
 
-    public MovieCardModel GetMovieById(int? id)
+    public async Task< MovieCardModel> GetMovieById(int? id)
     {
         if (id == null)
         {
             return null;
         }
         
-        Movie movie= _movieRepository.GetMovieById(id.Value);
+        Movie movie= await _movieRepository.GetMovieById(id.Value);
         return new MovieCardModel()
         {
             Id = movie.Id,
@@ -116,9 +116,9 @@ public class MovieService: IMovieService
     } 
     
 
-    public bool DeleteMovie(int id)
+    public async Task<bool> DeleteMovie(int id)
     {
-        var movie = _movieRepository.DeleteById(id);
+        var movie = await _movieRepository.DeleteById(id);
         if (movie == null)
         {
             return false;
@@ -126,5 +126,26 @@ public class MovieService: IMovieService
 
         return true;
     }
+
+    public async Task<PaginatedResultSetModel<MovieCardModel>> GetMovieByGenre(int genreId, int pageNumber, int pageSize)
+    {
+        (var movies, int TotalCount)= await _movieRepository.GetMoviesByGenre(genreId, pageNumber, pageSize);
     
+        var movieCardModels = new List<MovieCardModel>();
+        foreach (var movie in movies)
+        {
+            movieCardModels.Add(new MovieCardModel()
+            {
+                Id = movie.Id, PosterURL = movie.PosterUrl, Title = movie.Title
+            });
+        }
+        var paginatedResult = new PaginatedResultSetModel<MovieCardModel>()
+        {
+            Items = movieCardModels,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            TotalCount = TotalCount
+        };
+        return paginatedResult;
+    }
 }

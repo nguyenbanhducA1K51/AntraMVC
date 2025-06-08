@@ -7,7 +7,10 @@
         <div class="row">
            @foreach (var movie in Model)
            { 
-               <partial name="_MovieCard" model="movie"/>
+               <div class="col-md-3 mb-4">
+                   @Html.Partial("_MovieCard", movie)
+               </div>
+               @* <partial name="_MovieCard" model="movie"/> *@
            } 
         </div>
     </div>

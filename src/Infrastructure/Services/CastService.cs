@@ -14,9 +14,9 @@ public class CastService : ICastService
         _castRepository = castRepository;
     }
 
-    public CastModel GetCastDetails(int id)
+    public async Task<CastModel> GetCastDetails(int id)
     {
-        var cast = _castRepository.GetById(id);
+        var cast = await  _castRepository.GetById(id);
         return new CastModel()
         {
             Id = cast.Id,

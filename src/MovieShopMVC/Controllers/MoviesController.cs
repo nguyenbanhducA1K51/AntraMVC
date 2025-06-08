@@ -1,4 +1,6 @@
 using ApplicationCore.Contracts.Services;
+using ApplicationCore.Entities;
+using ApplicationCore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Scripting.Hosting;
 
@@ -54,6 +56,16 @@ namespace MovieShopMVC.Controllers
 
             _movieService.DeleteMovie(id);
             return RedirectToAction("Index","Home");
+        }
+        
+        public async Task<IActionResult> MoviesByGenre(int id, int pageSize = 30, int pageNumber = 1)
+        {
+          
+        var paginatedResult=await _movieService.GetMovieByGenre(id, pageNumber, pageSize);
+        paginatedResult.GenreId = id;
+        _logger.LogInformation("Model data: {@PaginatedResult}", paginatedResult);
+
+        return View(paginatedResult);
         }
 
     }

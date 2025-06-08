@@ -12,23 +12,22 @@ public class MovieRepository: BaseRepository<Movie>, IMovieRepository
     {
     }
 
-    public IEnumerable<Movie> GetTop20GrossingMovies()
+    public async Task< IEnumerable<Movie>> GetTop20GrossingMovies()
     {
-        var movies = _movieShopDbContext.Movie.OrderByDescending(m => m.Revenue).Take(20);
+        var movies = await _movieShopDbContext.Movie.OrderByDescending(m => m.Revenue).Take(20).ToListAsync(); ;
         return movies;
     }
 
-    public IEnumerable<Movie> GetHighestGrossingMovies()
+    public async Task< IEnumerable<Movie>> GetHighestGrossingMovies()
     {
-        var maxRevenue = _movieShopDbContext.Movie.Max(m => m.Revenue);
-        
-        return _movieShopDbContext.Movie
+        var maxRevenue = await _movieShopDbContext.Movie.MaxAsync(m => m.Revenue);
+
+        return await _movieShopDbContext.Movie
             .Where(m => m.Revenue == maxRevenue)
-            .ToList();
-        
+            .ToListAsync();
     }
 
-    public Movie GetMovieById(int id)
+    public async Task<Movie> GetMovieById(int id)
     {
       throw new NotImplementedException();
     }
@@ -40,6 +39,23 @@ public class MovieRepository: BaseRepository<Movie>, IMovieRepository
             .Include(m => m.MovieGenres).ThenInclude(mg => mg.Genre)
             .Include(m => m.MovieCasts).ThenInclude(mc => mc.Cast)
             .FirstOrDefaultAsync(m => m.Id == id);
+    }
+    
+    public async Task<(List<Movie>,int TotalPage)> GetMoviesByGenre(int genreId, int pageNumber, int pageSize)
+    {
+        var query = _movieShopDbContext.Movie
+            .Where(m => m.MovieGenres.Any(mg => mg.GenreId == genreId));
+
+        var totalCount = await query.CountAsync();
+
+        var movies = await query
+            .OrderBy(m => m.Title)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (movies, totalCount);
+        
     }
 
  

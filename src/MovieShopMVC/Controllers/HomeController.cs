@@ -16,19 +16,14 @@ public class HomeController : Controller
         movieService = _movieService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     { 
-        // var movieService = new MovieService();
-        var movies= movieService.GetTop20GrossingMovies();
+        var movies= await movieService.GetTop20GrossingMovies();
         return View(movies);
     }
 
     public IActionResult Privacy()
     {
-        //ViewData["Key"] = value;
-        //IDictinary<string, object >
-        // ViewData["Message"] = "Hello from ViewData";
-        // ViewData["Age"] = 30;
         ViewBag.Message = "Hello from ViewData";
         ViewBag.Age = 30;
         return View();

@@ -1,0 +1,11 @@
+@model List<ApplicationCore.Entities.Genre>
+
+<form asp-controller="Movies" asp-action="MoviesByGenre" method="get" class="d-flex align-items-center">
+    <select name="id" class="form-select form-select-sm me-2" onchange="this.form.submit()">
+        <option value="">Select Genre</option>
+        @foreach (var genre in Model)
+        {
+            <option value="@genre.Id">@genre.Name</option>
+        }
+    </select>
+</form>
