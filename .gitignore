@@ -3,6 +3,8 @@ idea
 packages-microsoft-prod.deb 
 
 
+**/Logs/
+
 # Build results
 **/bin/
 **/obj/

@@ -33,6 +33,12 @@ public class HomeController : Controller
     {
         return View();
     }
+    
+    [HttpGet("test-exception")]
+    public IActionResult Test()
+    {
+        throw new Exception("Test exception!");
+    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

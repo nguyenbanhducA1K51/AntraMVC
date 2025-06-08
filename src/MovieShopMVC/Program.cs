@@ -4,8 +4,19 @@ using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
-
+using MovieShopMVC.Filter;
+using MovieShopMVC.Middleware;
+using Serilog;
+using Serilog.Formatting.Json;
 var builder = WebApplication.CreateBuilder(args);
+
+
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Async(a => a.File(new JsonFormatter(), "Logs/logs.json", rollingInterval: RollingInterval.Day))
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews()
@@ -15,6 +26,7 @@ builder.Services.AddLogging(configure =>
     configure.AddConsole();
     configure.AddDebug();
 });
+builder.Services.AddScoped<LogRequestFilter>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<ICastRepository, CastRepository>();
@@ -35,6 +47,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseRouting();
 
 app.UseAuthorization();
